@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/map">
+        <file>re/bingdu.png</file>
+        <file>re/bullet.png</file>
+        <file>re/enemy.png</file>
+        <file>re/plane2.png</file>
+        <file>re/wallpaper1.jpeg</file>
+        <file>re/Welcome.jpg</file>
+    </qresource>
+</RCC>
