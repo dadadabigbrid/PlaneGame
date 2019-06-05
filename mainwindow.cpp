@@ -18,26 +18,38 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    life = 100;
+    score = 0;
+    ui->Life->setValue(life);
     drawemap();
 
     setWindowTitle(tr("Plane Game"));
 
-    ui->L_Score->setText("     0");
-    ui->L_Request->setText("     1");
-    ui->L_Life->setText("   5");
+    ui->textEdit->setReadOnly(true);
 
     /*将控件一开始隐藏，之后再显示*/
-    ui->L_Life->setVisible(false);
-    ui->L_Score->setVisible(false);
-    ui->L_Request->setVisible(false);
+    ui->lcdNumber->setVisible(false);
+    ui->textEdit->setVisible(false);
+    ui->Life->setVisible(false);
 
     //使用定时器来更新画面
+    timer1 = new QTimer;
+    connect(timer1,SIGNAL(timeout()),this,SLOT(scroll()));
+    timer1->start(65);
+
     timer = new QTimer;
-    connect(timer,SIGNAL(timeout()),this,SLOT(scroll()));
     connect(timer,SIGNAL(timeout()),this,SLOT(hit_ene()));
     connect(timer,SIGNAL(timeout()),this,SLOT(hit_me()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(I_am_running()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(repair()));
 
-    timer->start(65);
+    timer->start();
+
+    /*
+    *为什么timer没有stop会停止，或者是paintevent停止了
+    *经测试，timer没有停止，但是paintevent停止了，原因未知
+    */
 
 }
 
@@ -46,7 +58,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
+void MainWindow::I_am_running()
+{
+    temp++;
+    qDebug() << "I am running " << temp;
+}
 
 void MainWindow::drawemap()
 {
@@ -64,10 +80,11 @@ void MainWindow::scroll()
     if(m > 2000)
     {
         /*在这里将控件显示*/
-        ui->L_Life->setVisible(true);
-        ui->L_Score->setVisible(true);
-        ui->L_Request->setVisible(true);
+        ui->lcdNumber->setVisible(true);
+        ui->textEdit->setVisible(true);
+        ui->Life->setVisible(true);
         return;
+        timer1->stop();
     }
     m+=5;
     ui->label->move(-m,0);
@@ -91,13 +108,13 @@ void MainWindow::paintEvent(QPaintEvent *event)
                 paint(bu->loc.x,bu->loc.y,bs,10,10,10,10);
             }else {
                 myPlane1.bullet_vector.remove(i);
+                getscore();
             }
 
         }
-    }else {
-    //绘制爆炸情景
+    }else
+        gameover();
 
-    }
 
     //绘制敌人图片
     for (int j = 0;j < vector_enemy.size();j++)
@@ -122,11 +139,12 @@ void MainWindow::paintEvent(QPaintEvent *event)
                 }else
                 {
                     enemy->bullet_vector.remove(t);
+                    getscore();
                 }
             }
         }else
         {
-            //绘制敌人被击毁
+            //绘制敌人被击毁_____________________________________________________________________________________________________________TODO
 
             vector_enemy.remove(j);
         }
@@ -187,9 +205,11 @@ void MainWindow::hit_ene()
                     if(abs(bu->loc.x - ene->loc.x) <= 50 || abs(bu->loc.y - ene->loc.y) <= 50)
                     {
                         bu->islive = ene->islive = false;
-                        //积分面板数值加1
+                        //积分面板数值加50
+
                         vector_enemy.remove(j);
                         myPlane1.bullet_vector.remove(i);
+                        getscore();
                     }
                 }
             }
@@ -213,7 +233,7 @@ void MainWindow::hit_me()
                     {
                         bu->islive = ene->islive = false;
 
-                        gameover();
+                        hited();
                     }
                 }
             }
@@ -231,22 +251,41 @@ void MainWindow::hit()
         if(ene->islive)
         {
             if(abs(ene->loc.x - myPlane1.loc.x) <= 100 || abs(ene->loc.y - myPlane1.loc.y) <= 100)
-                gameover();
+                hited();
         }
     }
 }
 
+void MainWindow::hited()
+{
+    life -= 20;
+    ui->Life->setValue(life);
+
+    if(life < 0)
+        gameover();
+
+}
+
+void MainWindow::getscore()
+{
+    score += 50;
+    ui->lcdNumber->display(score);
+}
 void MainWindow::gameover()
 {
-    if(!myPlane1.islive)
-    {
-        //myPlane爆炸的画面
+    if(myPlane1.islive)
+        return;
+    //myPlane爆炸的画面__________________________________________________________________________________________________________________TODO
 
-        //清除画面，然后出现"菜"
-        //将控件隐藏
-        ui->L_Life->setVisible(false);
-        ui->L_Score->setVisible(false);
-        ui->L_Request->setVisible(false);
+    //清除画面，然后出现"菜"的画面
+    QPixmap pix(":/map/re/cai.jpg");
+    ui->label->resize(pix.size().width(),741);
 
-    }
+    QPixmap dest=pix.scaled(ui->label->size(),Qt::KeepAspectRatioByExpanding);
+    ui->label->setPixmap(dest);
+
+    //显示开始界面
+    WELCOME *w = new WELCOME;
+    w->show();
+
 }

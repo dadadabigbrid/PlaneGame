@@ -15,6 +15,9 @@ public:
     explicit WELCOME(QWidget *parent = nullptr);
     ~WELCOME();
 
+    //TODO
+    //第二次打开时将“开始游戏”变为“再来一次”
+
 private slots:
     void on_btn_start_clicked();
 

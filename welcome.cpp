@@ -2,6 +2,8 @@
 #include "ui_welcome.h"
 #include"mainwindow.h"
 #include<QFrame>
+#include<QSize>
+#include<QPixmap>
 
 WELCOME::WELCOME(QWidget *parent) :
     QMainWindow(parent),
@@ -22,6 +24,23 @@ WELCOME::WELCOME(QWidget *parent) :
     QPalette palette;
     palette.setBrush(backgroundRole(),QBrush(pixmap));
     setPalette(palette);
+
+    //Îª°´Å¥Ìí¼ÓÍ¼Æ¬
+    QSize size;
+    size.setWidth(300);
+    size.setHeight(100);
+
+    QPixmap start(tr(":/map/re/start_game.png"));
+    ui->btn_start->setIcon(start);
+    ui->btn_start->setIconSize(size);
+
+    QPixmap help(tr(":/map/re/help.png"));
+    ui->pushButton->setIcon(help);
+    ui->pushButton->setIconSize(size);
+
+    QPixmap exit(tr(":/map/re/exit.png"));
+    ui->btn_exit->setIcon(exit);
+    ui->btn_exit->setIconSize(size);
 }
 
 WELCOME::~WELCOME()

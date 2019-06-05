@@ -6,5 +6,9 @@
         <file>re/plane2.png</file>
         <file>re/wallpaper1.jpeg</file>
         <file>re/Welcome.jpg</file>
+        <file>re/exit.png</file>
+        <file>re/help.png</file>
+        <file>re/start_game.png</file>
+        <file>re/cai.jpg</file>
     </qresource>
 </RCC>

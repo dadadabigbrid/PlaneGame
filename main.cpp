@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
     //MainWindow w;
     //w.show();
 
-    WELCOME *w = new WELCOME;
-    w->show();
+    WELCOME w;
+    w.show();
 
     return a.exec();
 }
