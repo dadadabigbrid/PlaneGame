@@ -22,6 +22,8 @@ PlaneGame
   为什么timer没有stop会停止，或者是paintevent停止了
   经测试，timer没有停止，但是paintevent停止了，原因未知
   
+- 如果可以，希望帅气的全可以帮我看一下(嬉皮笑脸)
+  
 /*
 文件名类名什么的随意，只要能玩就ok
 要求有尽量详细的注释
