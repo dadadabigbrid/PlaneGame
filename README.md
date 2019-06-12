@@ -1,6 +1,6 @@
-# PlaneGame
+PlaneGame
 
-#还没写好，先备份一次
+#写不完了
 
 ##找到一些重大bug
     为什么timer没有stop会停止，或者是paintevent停止了
@@ -10,7 +10,7 @@
 - 基础功能
   绘制出玩家飞机（✈️）
   实现玩家对飞机（✈️）的控制（上下左右移动，空格开火（🚀））(难点)
-  实现敌人（🦠）的出现与移动（敌人可以随机移动，也可以朝着玩家移动）
+  实现敌人（🦠）的出现与移动（敌人随即出现在地图上方，以指定速度向下方移动）
 
 - 进阶功能（包括但不限于）
   合理调整图片大小
@@ -18,7 +18,14 @@
   🦠被🚀干掉（两者相碰），记录分数 
   尽量用上已经给的类，也可以重写已经给的类
 
-
+- 实现
+  bullet类和plane类为基类，bullet继承自QThread类
+  myplane类继承自plane类和QObject类，enemy继承自plane类和QThread类
+  mainwindow中主要是各种类的绘图，主要用Qt计时器和paintEvent函数来更新画面
+  用QKeyEvent来接收键盘输入信号
+- 一些重大bug
+  为什么timer没有stop会停止，或者是paintevent停止了
+  经测试，timer没有停止，但是paintevent停止了，原因未知
   
 /*
 文件名类名什么的随意，只要能玩就ok
